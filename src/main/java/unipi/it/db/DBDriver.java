@@ -5,25 +5,18 @@ import java.util.HashMap;
 
 public class DBDriver {
 
-    private static final String url = "jdbc:mysql://localhost:3306/HomeAutomationDB";
+    private static final String url = "jdbc:mysql://localhost:3306/HomeAutomationDB?serverTimezone=Europe/Rome";
     private static final String username = "root";
     private static final String password = "ubuntu";
 
     public static int updateActuators(String address, String actuatorType, Boolean status) throws SQLException {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            Connection connection = DriverManager.getConnection(url, username, password);
-            PreparedStatement ps = connection.prepareStatement("REPLACE INTO actuators (ip, type, active) VALUES(?,?,?);");
-            ps.setString(1, address.substring(1));
-            ps.setString(2, actuatorType);
-            ps.setBoolean(3, status);
-            ps.executeUpdate();
-            return ps.getUpdateCount();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-
+        Connection connection = DriverManager.getConnection(url, username, password);
+        PreparedStatement ps = connection.prepareStatement("REPLACE INTO actuators (ip, type, active) VALUES(?,?,?);");
+        ps.setString(1, address.substring(1));
+        ps.setString(2, actuatorType);
+        ps.setBoolean(3, status);
+        ps.executeUpdate();
+        return ps.getUpdateCount();
     }
 
     public static HashMap<String, Object> retrieveActuator(String actuatorType) throws SQLException {

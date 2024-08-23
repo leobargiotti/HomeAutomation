@@ -10,13 +10,20 @@ public class DBDriver {
     private static final String password = "ubuntu";
 
     public static int updateActuators(String address, String actuatorType, Boolean status) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, username, password);
-        PreparedStatement ps = connection.prepareStatement("REPLACE INTO actuators (ip, type, active) VALUES(?,?,?);");
-        ps.setString(1, address.substring(1));
-        ps.setString(2, actuatorType);
-        ps.setBoolean(3, status);
-        ps.executeUpdate();
-        return ps.getUpdateCount();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection connection = DriverManager.getConnection(url, username, password);
+            PreparedStatement ps = connection.prepareStatement("REPLACE INTO actuators (ip, type, active) VALUES(?,?,?);");
+            ps.setString(1, address.substring(1));
+            ps.setString(2, actuatorType);
+            ps.setBoolean(3, status);
+            ps.executeUpdate();
+            return ps.getUpdateCount();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
     public static HashMap<String, Object> retrieveActuator(String actuatorType) throws SQLException {

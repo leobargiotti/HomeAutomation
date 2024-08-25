@@ -38,9 +38,8 @@ public class DBDriver {
     public static int insertData(Long value, String type) throws SQLException {
         Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement ps = connection.prepareStatement("INSERT INTO data (value, sensor) VALUES(?,?);");
-        ps.setString(1, String.valueOf(value));
+        ps.setInt(1, Math.toIntExact(value));
         ps.setString(2, type);
-        //ps.setString(3, String.valueOf(Instant.now()));
         ps.execute();
         return ps.getUpdateCount();
     }

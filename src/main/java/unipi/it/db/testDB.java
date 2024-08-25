@@ -10,8 +10,7 @@ public class testDB {
             System.out.println(DBDriver.retrieveActuator("temperature"));
             DBDriver.resetActuators();
         }catch (Exception e){
-            System.out.println("PROBLEM");
-            System.out.println(e);
+            throw new RuntimeException();
         }
 
         try{
@@ -21,8 +20,7 @@ public class testDB {
             System.out.println(DBDriver.retrieveData());
             DBDriver.resetActuators();
         }catch (Exception e){
-            System.out.println("PROBLEM");
-            System.out.println(e);
+            throw new RuntimeException();
         }
 
     }

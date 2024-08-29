@@ -46,5 +46,11 @@ public class COAPClient {
 
     }
 
+    public static void setSensors(String danger, boolean val){
+        sensors.put(danger, val);
+    }
+
+    public static HashMap<String, Boolean> getSensors(){return sensors;}
+
 }
 

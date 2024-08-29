@@ -48,8 +48,6 @@ static struct ctimer light_timer;
 #define APP_BUFFER_SIZE 512
 static char app_buffer[APP_BUFFER_SIZE];
 
-static struct mqtt_message *msg_ptr = 0;
-
 static struct mqtt_connection conn;
 
 mqtt_status_t status;
@@ -71,10 +69,10 @@ static uint8_t state;
 PROCESS(mqtt_client_light, "MQTT sensor light");
 AUTOSTART_PROCESSES(&mqtt_client_light);
 
-static uint8_t min_light = 0;
-static uint8_t max_light = 0;
-static uint8_t start_light = (max_light+min_humidity)/2;
-static int light = start_light;
+static uint8_t min_light = 2000;
+static uint8_t max_light = 4000;
+static uint8_t start_light = 3000;
+static int light = 3000;
 static bool actuator_on = false;
 static bool lighting = true;
 static bool first_sensing = true;
@@ -143,7 +141,7 @@ static void mqtt_event (struct mqtt_connection *m, mqtt_event_t event, void *dat
             printf("MQTT Disconnect. Reason %u\n", *((mqtt_event_t *)data));
 
             state = STATE_DISCONNECTED;
-            process_poll(&mqtt_client_process);
+            process_poll(&mqtt_client_light);
             break;
         }
         case MQTT_EVENT_PUBLISH: {
@@ -206,7 +204,7 @@ PROCESS_THREAD(mqtt_client_light, ev, data){
             linkaddr_node_addr.u8[2], linkaddr_node_addr.u8[5],
             linkaddr_node_addr.u8[6], linkaddr_node_addr.u8[7]);
         // Brokerregistration
-    mqtt_register(&conn, &mqtt_client_process, client_id,
+    mqtt_register(&conn, &mqtt_client_light, client_id,
         mqtt_event, MAX_TCP_SEGMENT_SIZE);
 
     state=STATE_INIT;
@@ -243,8 +241,7 @@ PROCESS_THREAD(mqtt_client_light, ev, data){
                     MQTT_QOS_LEVEL_0);
                 printf("Subscribing!\n");
                 if(status == MQTT_STATUS_OUT_QUEUE_FULL) {
-                    LOG_ERR("Tried to subscribe but command
-                        queue was full!\n");
+                    LOG_ERR("Tried to subscribe but command queue was full!\n");
                     PROCESS_EXIT();
                 }
                 state = STATE_SUBSCRIBED;

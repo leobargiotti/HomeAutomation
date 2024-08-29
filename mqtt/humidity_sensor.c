@@ -48,8 +48,6 @@ static struct ctimer humidity_timer;
 #define APP_BUFFER_SIZE 512
 static char app_buffer[APP_BUFFER_SIZE];
 
-static struct mqtt_message *msg_ptr = 0;
-
 static struct mqtt_connection conn;
 
 mqtt_status_t status;
@@ -73,8 +71,8 @@ AUTOSTART_PROCESSES(&mqtt_client_humidity);
 
 static uint8_t min_humidity = 40;
 static uint8_t max_humidity = 60;
-static uint8_t start_humidity = (max_humidity+min_humidity)/2;
-static int humidity = start_humidity;
+static uint8_t start_humidity = 50;
+static int humidity = 50;
 static bool actuator_on = false;
 static bool humidifying = true;
 static bool first_sensing = true;
@@ -141,7 +139,7 @@ static void mqtt_event (struct mqtt_connection *m, mqtt_event_t event, void *dat
             printf("MQTT Disconnect. Reason %u\n", *((mqtt_event_t *)data));
 
             state = STATE_DISCONNECTED;
-            process_poll(&mqtt_client_process);
+            process_poll(&mqtt_client_humidity);
             break;
         }
         case MQTT_EVENT_PUBLISH: {
@@ -204,7 +202,7 @@ PROCESS_THREAD(mqtt_client_humidity, ev, data){
             linkaddr_node_addr.u8[2], linkaddr_node_addr.u8[5],
             linkaddr_node_addr.u8[6], linkaddr_node_addr.u8[7]);
         // Brokerregistration
-    mqtt_register(&conn, &mqtt_client_process, client_id,
+    mqtt_register(&conn, &mqtt_client_humidity, client_id,
         mqtt_event, MAX_TCP_SEGMENT_SIZE);
 
     state=STATE_INIT;
@@ -241,8 +239,7 @@ PROCESS_THREAD(mqtt_client_humidity, ev, data){
                     MQTT_QOS_LEVEL_0);
                 printf("Subscribing!\n");
                 if(status == MQTT_STATUS_OUT_QUEUE_FULL) {
-                    LOG_ERR("Tried to subscribe but command
-                        queue was full!\n");
+                    LOG_ERR("Tried to subscribe but command queue was full!\n");
                     PROCESS_EXIT();
                 }
                 state = STATE_SUBSCRIBED;

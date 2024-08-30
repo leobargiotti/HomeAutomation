@@ -259,7 +259,8 @@ PROCESS_THREAD(mqtt_client_temp, ev, data){
                 LOG_ERR("Disconnected\n");
                 state=STATE_INIT;
             }
+            etimer_set (&periodic_timer , STATE_MACHINE_PERIODIC);
         }
-        PROCESS_END();
     }
+    PROCESS_END();
 }

@@ -6,6 +6,7 @@
 #include "coap-engine.h"
 #include "os/dev/button-hal.h"
 #include "coap-blocking-api.h"
+#include "dev/leds.h"
 
 /* Log configuration */
 #include "coap-log.h"
@@ -59,11 +60,18 @@ PROCESS_THREAD(smart_light_client, ev, data){
     
     coap_activate_resource(&light_resource, "light");
 
+    button_hal_button_t *btn;
+        btn = button_hal_get_by_index(0);
+        if(btn){
+    	printf("%s \n",
+    		BUTTON_HAL_GET_DESCRIPTION(btn));
+        }
+
     while(1){
         PROCESS_WAIT_EVENT();
         //DA DECIDERE PER IL BOTTONE
         if(ev==button_hal_release_event){
-            light_resource.button_pressed();
+            light_resource.trigger();
         }
     }
 

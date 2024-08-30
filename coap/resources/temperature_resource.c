@@ -2,9 +2,13 @@
 #include "coap-engine.h"
 #include "dev/leds.h"
 #include "os/dev/button-hal.h"
-#include "json_util.h"
+#include "util.h"
 
 #include <string.h>
+
+#include "sys/log.h"
+#define LOG_MODULE "App"
+#define LOG_LEVEL LOG_LEVEL_APP
 
 static bool actuator_needed = false;
 static bool actuator_on = false;
@@ -20,8 +24,8 @@ RESOURCE(res_temperature,
 
 static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset){
     size_t len = 0;
-    const char *command = NULL;
-    uint8_t led = 0;
+    const char *threshold = NULL;
+    const char *action = NULL;
     bool success = true;
     const uint8_t *chunk;
 
@@ -87,7 +91,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
     }
 }
 
-static void button_pressed(){
+static void trigger(){
     if(!manual){
         manual = true;
         leds_off(LEDS_RED);

@@ -14,13 +14,15 @@ static bool actuator_needed = false;
 static bool actuator_on = false;
 static bool manual = false;
 static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
+static void trigger();
 
-RESOURCE(res_temperature,
+EVENT_RESOURCE(temperature_resource,
          "title=\"temperature\";rt=\"Text\"", //DA SISTEMARE
          NULL,
          NULL,
          res_put_handler,
-         NULL);
+         NULL,
+         trigger);
 
 static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset){
     size_t len = 0;

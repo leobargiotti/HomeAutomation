@@ -96,14 +96,14 @@ static void sense_temperature(){
     else{ //conditioner is working
         if(warming){
             temperature -= 2;
-            if(temperature == min_temperature){ //the temperature is back to it's normal value
+            if(temperature == start_temperature){ //the temperature is back to it's normal value
                 actuator_on = false;
                 warming = !warming;
             }
         }
         else{
             temperature += 2;
-            if(temperature == max_temperature){ //the temperature is back to it's normal value
+            if(temperature == start_temperature){ //the temperature is back to it's normal value
                 actuator_on = false;
                 warming = !warming;
             }

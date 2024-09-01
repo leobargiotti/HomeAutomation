@@ -71,7 +71,7 @@ PROCESS_THREAD(humidifier_client, ev, data){
         PROCESS_WAIT_EVENT();
         //DA DECIDERE PER IL BOTTONE
         if(ev==button_hal_release_event){
-            humidity_resource.trigger);
+            humidity_resource.trigger();
         }
     }
 

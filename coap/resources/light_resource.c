@@ -14,13 +14,15 @@ static bool actuator_needed = false;
 static bool actuator_on = false;
 static bool manual = false;
 static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
+static void trigger();
 
-RESOURCE(res_light,
+EVENT_RESOURCE(light_resource,
          "title=\"light\";rt=\"Text\"", //DA SISTEMARE
          NULL,
          NULL,
          res_put_handler,
-         NULL);
+         NULL,
+         trigger);
 
 static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset){
     size_t len = 0;
@@ -51,6 +53,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
             if(!actuator_on){
                 actuator_on=true;
             }
+            manual = false;
         }
         else{ //the light is now in the optimal interval
             if(action!=NULL && strlen(action)>0){

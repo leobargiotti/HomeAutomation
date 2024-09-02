@@ -56,21 +56,14 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
         }
         else{ //the temperature is now in the optimal interval
             if(action!=NULL && strlen(action)>0){
-                if(strcmp(action, "ON_UP")==0 && !actuator_on){ //the actuator is off and the user wants to turn it on to warm up
+                if(strcmp(action, "true")==0 && !actuator_on){ //the actuator is off and the user wants to turn it on
                     //coap, led and log
                     LOG_INFO("conditioner on for user input\n");
                     coap_set_status_code(response,CHANGED_2_04);
                     leds_on(LEDS_GREEN);
                     actuator_on=true;
                 }
-                else if(strcmp(action, "ON_DOWN")==0 && !actuator_on){ //the actuator is off and the user wants to turn it on to cool down
-                    //coap, led and log
-                    LOG_INFO("conditioner on for user input\n");
-                    coap_set_status_code(response,CHANGED_2_04);
-                    leds_on(LEDS_GREEN);
-                    actuator_on=true;
-                }
-                else if(strcmp(action, "OFF")==0 && actuator_on){ //the actuator is on and the user wants to turn it off
+                else if(strcmp(action, "false")==0 && actuator_on){ //the actuator is on and the user wants to turn it off
                     //coap
                     LOG_INFO("conditioner off for user input\n");
                     coap_set_status_code(response,CHANGED_2_04);

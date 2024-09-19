@@ -111,7 +111,7 @@ static void sense_light(){
     }
     sense_light();
     sprintf(pub_topic, "%s", "light");
-    sprintf(app_buffer , "light: %d", light);
+    sprintf(app_buffer , "{ \"value\": %d }", light);
     mqtt_publish(&conn, NULL, pub_topic,
         (uint8_t*) app_buffer,
         strlen(app_buffer),

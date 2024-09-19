@@ -109,7 +109,7 @@ static void sense_humidity(){
         }
     }
     sprintf(pub_topic, "%s", "humidity");
-    sprintf(app_buffer , "humidity: %d", humidity);
+    sprintf(app_buffer , "{ \"value\": %d }", humidity);
     mqtt_publish(&conn, NULL, pub_topic,
         (uint8_t*) app_buffer,
         strlen(app_buffer),

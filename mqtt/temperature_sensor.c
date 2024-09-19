@@ -111,7 +111,7 @@ static void sense_temperature(){
     }
 
     sprintf(pub_topic, "%s", "temperature");
-    sprintf(app_buffer , "temperature: %d", temperature);
+    sprintf(app_buffer , "{ \"value\": %d }", temperature);
     mqtt_publish(&conn, NULL, pub_topic,
         (uint8_t*) app_buffer,
         strlen(app_buffer),

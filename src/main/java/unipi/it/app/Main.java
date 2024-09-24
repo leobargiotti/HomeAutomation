@@ -14,10 +14,10 @@ public class Main {
         ScheduledExecutorService executorService = null;
         try {
             executorService = Executors.newScheduledThreadPool(4);
-            executorService.schedule(CommandLineInterface.getInstance(), 120, TimeUnit.SECONDS);
+            executorService.schedule(CommandLineInterface.getInstance(), 30, TimeUnit.SECONDS);
             executorService.schedule(COAPRegistrationHandler.getInstance(), 0, TimeUnit.SECONDS);
             executorService.schedule(MQTTHandler.getInstance(), 0, TimeUnit.SECONDS);
-            executorService.scheduleAtFixedRate(PeriodicDataRetrieval.getInstance(), 120, 7, TimeUnit.SECONDS);
+            executorService.scheduleAtFixedRate(PeriodicDataRetrieval.getInstance(), 30, 10, TimeUnit.SECONDS);
         } catch (Exception e) {
             executorService.shutdown();
         }

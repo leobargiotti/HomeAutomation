@@ -34,21 +34,23 @@ public class PeriodicDataRetrieval implements Runnable{ //singleton class
                 System.out.println("Could not retrieve any data");
             }
             else{
+                boolean checkOff=false;
                 for(String key : values.keySet()) {
                     HashMap<String, Object> act = DBDriver.retrieveActuator(key);
-
                     if (!act.isEmpty()) {
                         //System.out.println("act is not empty");
                         if (values.get(key) < thresholdsMin.get(key) && values.get(key) > thresholdsMax.get(key)) {
                             COAPClient.setSensors(key, true);
                             if (! (boolean) act.get("active")) {
+                                checkOff=true;
                                 System.err.println("Danger detected on " + key + " sensor, advertising the actuator");
                                 COAPClient.actuatorCall((String) act.get("ip"), key, true, 1);
                             }
                         } else {
                             COAPClient.setSensors(key, false); //turning off the actuator if under or upper the thresholds
                             if ((values.get(key) > thresholdsMin.get(key) || values.get(key) < thresholdsMax.get(key))
-                                    && (boolean) act.get("active")) {
+                                    && (boolean) act.get("active") && checkOff) {
+                                checkOff=false;
                                 System.err.println("Turning off the " + key + " actuator since there is no danger");
                                 COAPClient.actuatorCall((String) act.get("ip"), key, false, 0);
                             }

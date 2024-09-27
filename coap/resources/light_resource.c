@@ -45,6 +45,9 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
         if(atoi(threshold)==1 || atoi(threshold)==2){
             actuator_needed=true;
         }
+        else{
+            actuator_needed=false;
+        }
 
         if(actuator_needed){ //too light or too dark, need to activate the actuator
             //led
@@ -68,9 +71,10 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
                     //coap
                     LOG_INFO("smart light off for user input\n");
                     coap_set_status_code(response,CHANGED_2_04);
-                    if((leds_get() && LEDS_RED)>0) //automatic deactivation
+                    if((leds_get() && LEDS_RED)>0){ //automatic deactivation
                         leds_off(LEDS_RED);
                         leds_on(LEDS_GREEN);
+                    }
                     else //manual deactivation
                         leds_off(LEDS_GREEN);
                     actuator_on=false;

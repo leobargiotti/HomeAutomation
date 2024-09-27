@@ -45,6 +45,9 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
         if(atoi(threshold)==1 || atoi(threshold)==2){
             actuator_needed=true;
         }
+        else{
+            actuator_needed=false;
+        }
 
         if(actuator_needed){ //too hot or too cold, need to activate the actuator
             //led

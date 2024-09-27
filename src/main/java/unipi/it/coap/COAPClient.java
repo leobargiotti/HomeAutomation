@@ -33,6 +33,7 @@ public class COAPClient {
             CoAP.ResponseCode code = response.getCode();
             //System.out.println(code);
             switch (code) {
+                case CONTENT:
                 case CHANGED:
                     System.err.println("State correctly changed because of danger or user input");
                     DBDriver.updateActuators("/" + ip, resource, action);

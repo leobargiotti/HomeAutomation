@@ -67,7 +67,11 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
                     //coap
                     LOG_INFO("dehumidifier off for user input\n");
                     coap_set_status_code(response,CHANGED_2_04);
-                    leds_off(LEDS_GREEN);
+                    leds_off(LEDS_BLUE);
+                    if((leds_get() && LEDS_GREEN)>0) //manual deactivation
+                        leds_off(LEDS_GREEN);
+                    else //automatic deactivation
+                        leds_on(LEDS_GREEN);
                     actuator_on=false;
                 }
                 else{ //wrong input
@@ -87,7 +91,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
 }
 
 static void trigger(){
-    if(!manual){
+    /*if(!manual){
         manual = true;
         leds_off(LEDS_BLUE);
         leds_on(LEDS_GREEN);
@@ -99,5 +103,11 @@ static void trigger(){
         else{
             leds_on(LEDS_GREEN);
         }
+    }*/
+    if((leds_get() && LEDS_GREEN)>0){
+        leds_off(LEDS_GREEN);
+    }
+    else{
+        LOG_INFO("LED already off \n");
     }
 }

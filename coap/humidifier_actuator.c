@@ -15,7 +15,7 @@
 
 #define SERVER_EP "coap://[fd00::1]:5683"
 static bool registration_done = false;
-char *service_url = "/registrator";
+char *service_url = "/registration";
 // Define a handler to handle the response from the server
 void client_chunk_handler(coap_message_t *response)
 {

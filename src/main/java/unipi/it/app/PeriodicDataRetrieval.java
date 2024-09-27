@@ -39,7 +39,7 @@ public class PeriodicDataRetrieval implements Runnable{ //singleton class
 
                     if (!act.isEmpty()) {
                         //System.out.println("act is not empty");
-                        if (values.get(key) < thresholdsMin.get(key) && values.get(key) > thresholdsMax.get(key)) {
+                        if (values.get(key) < thresholdsMin.get(key) || values.get(key) > thresholdsMax.get(key)) {
                             COAPClient.setSensors(key, true);
                             if (! (boolean) act.get("active")) {
                                 System.err.println("Danger detected on " + key + " sensor, advertising the actuator");
@@ -47,7 +47,7 @@ public class PeriodicDataRetrieval implements Runnable{ //singleton class
                             }
                         } else {
                             COAPClient.setSensors(key, false); //turning off the actuator if under or upper the thresholds
-                            if ((values.get(key) > thresholdsMin.get(key) || values.get(key) < thresholdsMax.get(key))
+                            if ((values.get(key) > thresholdsMin.get(key) && values.get(key) < thresholdsMax.get(key))
                                     && (boolean) act.get("active")) {
                                 System.err.println("Turning off the " + key + " actuator since there is no danger");
                                 COAPClient.actuatorCall((String) act.get("ip"), key, false, 0);

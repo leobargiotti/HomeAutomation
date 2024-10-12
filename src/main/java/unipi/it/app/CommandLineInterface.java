@@ -90,7 +90,7 @@ public class CommandLineInterface implements Runnable{
             String input = (s.nextLine().trim());
             boolean inputBoolean = true ? input.equals("ON") : false;
             HashMap<String, Object> act = DBDriver.retrieveActuator(actuator);
-            if(Objects.equals(act.get("active"), input)){
+            if(Objects.equals(act.get("active"), inputBoolean)){
                 System.out.println("Actuator already in this status");
             }
             else {
@@ -103,17 +103,36 @@ public class CommandLineInterface implements Runnable{
     }
 
     private static void changeThreshold(String sensor, Scanner s) {
+        System.out.println("Do you want to change the MIN or the MAX treshold?");
+        String inputS = (s.nextLine().trim());
         System.out.println("Insert the new value: ");
         int input = Integer.parseInt(s.nextLine().trim());
-        switch (sensor){
-            case "temperature":
-                PeriodicDataRetrieval.setTemperatureThreshold(input);
+        switch (inputS) {
+            case "MIN":
+                switch (sensor) {
+                    case "temperature":
+                        PeriodicDataRetrieval.setMinTemperatureThreshold(input);
+                        break;
+                    case "humidity":
+                        PeriodicDataRetrieval.setMinHumidityThreshold(input);
+                        break;
+                    case "light":
+                        PeriodicDataRetrieval.setMinLightThreshold(input);
+                        break;
+                }
                 break;
-            case "humidity":
-                PeriodicDataRetrieval.setHumidityThreshold(input);
-                break;
-            case "light":
-                PeriodicDataRetrieval.setLightThreshold(input);
+            case "MAX":
+                switch (sensor) {
+                    case "temperature":
+                        PeriodicDataRetrieval.setMaxTemperatureThreshold(input);
+                        break;
+                    case "humidity":
+                        PeriodicDataRetrieval.setMaxHumidityThreshold(input);
+                        break;
+                    case "light":
+                        PeriodicDataRetrieval.setMaxLightThreshold(input);
+                        break;
+                }
                 break;
         }
         System.out.println("Value changed");

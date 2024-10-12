@@ -48,13 +48,14 @@ PROCESS_THREAD(conditioner_client, ev, data){
     leds_off(LEDS_GREEN);
     leds_off(LEDS_YELLOW);
 
-    coap_endpoint_parse(SERVER_EP, strlen(SERVER_EP), &server_ep);
-    coap_init_message(request, COAP_TYPE_CON, COAP_POST, 0);
-    coap_set_header_uri_path(request, service_url);
-    const char msg[] = "{\"type\":\"temperature\"}";
-    coap_set_payload(request, (uint8_t *)msg, sizeof(msg) - 1);
+
 
     while(!registration_done){
+        coap_endpoint_parse(SERVER_EP, strlen(SERVER_EP), &server_ep);
+        coap_init_message(request, COAP_TYPE_CON, COAP_POST, 0);
+        coap_set_header_uri_path(request, service_url);
+        const char msg[] = "{\"type\":\"temperature\"}";
+        coap_set_payload(request, (uint8_t *)msg, sizeof(msg) - 1);
         COAP_BLOCKING_REQUEST(&server_ep, request, client_chunk_handler);
     }
     

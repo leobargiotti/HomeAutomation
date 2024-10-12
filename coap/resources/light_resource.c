@@ -13,6 +13,7 @@
 static bool actuator_needed = false;
 static bool actuator_on = false;
 static bool manual = false;
+static bool green = false;
 static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void trigger();
 
@@ -65,18 +66,23 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
                     LOG_INFO("smart light on for user input\n");
                     coap_set_status_code(response,CHANGED_2_04);
                     leds_on(LEDS_GREEN);
+                    green=true;
                     actuator_on=true;
                 }
                 else if(strcmp(action, "false")==0 && actuator_on){ //the actuator is on and the user wants to turn it off
                     //coap
                     LOG_INFO("smart light off for user input\n");
                     coap_set_status_code(response,CHANGED_2_04);
-                    if((leds_get() && LEDS_RED)>0){ //automatic deactivation
+                    if(!green){
+                    //if((leds_get() && LEDS_RED)>0){ //automatic deactivation
                         leds_off(LEDS_RED);
                         leds_on(LEDS_GREEN);
+                        green=true;
                     }
-                    else //manual deactivation
+                    else{ //manual deactivation
                         leds_off(LEDS_GREEN);
+                        green=false;
+                    }
                     actuator_on=false;
                 }
                 else{ //wrong input
@@ -110,8 +116,10 @@ static void trigger(){
             leds_on(LEDS_GREEN);
         }
     }*/
-    if((leds_get() && LEDS_GREEN)>0){
+    if(green){
+    //if((leds_get() && LEDS_GREEN)>0){
         leds_off(LEDS_GREEN);
+        green=false;
     }
     else{
         LOG_INFO("LED already off \n");

@@ -68,16 +68,52 @@ public class PeriodicDataRetrieval implements Runnable{ //singleton class
         }
     }
 
-    public static void setTemperatureThreshold(Integer val){
+    public static void setMinTemperatureThreshold(Integer val){
+        if(val >= thresholdsMax.get("temperature")){
+            System.out.println("The min threshold you are trying to set is greater than the max threshold");
+            return;
+        }
         thresholdsMin.put("temperature", val);
     }
 
-    public static void setHumidityThreshold(Integer val){
+    public static void setMinHumidityThreshold(Integer val){
+        if(val >= thresholdsMax.get("humidity")){
+            System.out.println("The min threshold you are trying to set is greater than the max threshold");
+            return;
+        }
         thresholdsMin.put("humidity", val);
     }
 
-    public static void setLightThreshold(Integer val){
+    public static void setMinLightThreshold(Integer val){
+        if(val >= thresholdsMax.get("light")){
+            System.out.println("The min threshold you are trying to set is greater than the max threshold");
+            return;
+        }
         thresholdsMin.put("light", val);
+    }
+
+    public static void setMaxTemperatureThreshold(Integer val){
+        if(val <= thresholdsMin.get("temperature")){
+            System.out.println("The max threshold you are trying to set is lower than the min threshold");
+            return;
+        }
+        thresholdsMax.put("temperature", val);
+    }
+
+    public static void setMaxHumidityThreshold(Integer val){
+        if(val <= thresholdsMin.get("humidity")){
+            System.out.println("The max threshold you are trying to set is lower than the min threshold");
+            return;
+        }
+        thresholdsMax.put("humidity", val);
+    }
+
+    public static void setMaxLightThreshold(Integer val){
+        if(val <= thresholdsMin.get("light")){
+            System.out.println("The max threshold you are trying to set is lower than the min threshold");
+            return;
+        }
+        thresholdsMax.put("light", val);
     }
 
 }

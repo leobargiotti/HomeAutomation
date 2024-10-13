@@ -43,7 +43,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
 
     if(threshold!=NULL && strlen(threshold)!=0) {
 
-        if(atoi(threshold)==1 || atoi(threshold)==2){
+        if(atoi(threshold)==1){
             actuator_needed=true;
         }
         else{

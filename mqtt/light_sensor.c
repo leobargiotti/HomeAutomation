@@ -69,10 +69,10 @@ static uint8_t state;
 PROCESS(mqtt_client_light, "MQTT sensor light");
 AUTOSTART_PROCESSES(&mqtt_client_light);
 
-static uint8_t min_light = 2000;
-static uint8_t max_light = 4000;
-static uint8_t start_light = 3000;
-static int light = 3000;
+static uint16_t min_light = 100;
+static uint16_t max_light = 300;
+static uint16_t start_light = 200;
+static int light = 200;
 static bool actuator_on = false;
 static bool lighting = true;
 static bool first_sensing = true;
@@ -80,13 +80,13 @@ static bool first_sensing = true;
 static void sense_light(){
     if(!actuator_on){ //smart light is not working
         if(lighting){ //light is increasing
-            light += 0;
+            light += 30;
             if(light > max_light){ //too light
                 actuator_on = true;
             }
         }
         else{ //light is decreasing
-            light -= 0;
+            light -= 30;
             if(light < min_light){ //too dark
                 actuator_on = true;
             }
@@ -94,14 +94,14 @@ static void sense_light(){
     }
     else{ //smart light is working
         if(lighting){
-            light -= 0;
+            light -= 30;
             if(light == start_light){ //back to normal light
                 actuator_on = false;
                 lighting = !lighting;
             }
         }
         else{
-            light += 0;
+            light += 30;
             if(light == start_light){ //back to normal light
                 actuator_on = false;
                 lighting = !lighting;
@@ -109,7 +109,6 @@ static void sense_light(){
         }
         
     }
-    sense_light();
     sprintf(pub_topic, "%s", "light");
     sprintf(app_buffer , "{ \"value\": %d }", light);
     mqtt_publish(&conn, NULL, pub_topic,

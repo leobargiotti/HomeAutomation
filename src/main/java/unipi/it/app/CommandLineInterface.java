@@ -103,6 +103,7 @@ public class CommandLineInterface implements Runnable{
     }
 
     private static void changeThreshold(String sensor, Scanner s) {
+        boolean done = false;
         System.out.println("Do you want to change the MIN or the MAX treshold?");
         String inputS = (s.nextLine().trim());
         System.out.println("Insert the new value: ");
@@ -111,31 +112,32 @@ public class CommandLineInterface implements Runnable{
             case "MIN":
                 switch (sensor) {
                     case "temperature":
-                        PeriodicDataRetrieval.setMinTemperatureThreshold(input);
+                        done=PeriodicDataRetrieval.setMinTemperatureThreshold(input);
                         break;
                     case "humidity":
-                        PeriodicDataRetrieval.setMinHumidityThreshold(input);
+                        done=PeriodicDataRetrieval.setMinHumidityThreshold(input);
                         break;
                     case "light":
-                        PeriodicDataRetrieval.setMinLightThreshold(input);
+                        done=PeriodicDataRetrieval.setMinLightThreshold(input);
                         break;
                 }
                 break;
             case "MAX":
                 switch (sensor) {
                     case "temperature":
-                        PeriodicDataRetrieval.setMaxTemperatureThreshold(input);
+                        done=PeriodicDataRetrieval.setMaxTemperatureThreshold(input);
                         break;
                     case "humidity":
-                        PeriodicDataRetrieval.setMaxHumidityThreshold(input);
+                        done=PeriodicDataRetrieval.setMaxHumidityThreshold(input);
                         break;
                     case "light":
-                        PeriodicDataRetrieval.setMaxLightThreshold(input);
+                        done=PeriodicDataRetrieval.setMaxLightThreshold(input);
                         break;
                 }
                 break;
         }
-        System.out.println("Value changed");
+        if(done)
+            System.out.println("Value changed");
     }
 
     private static void helpList(){

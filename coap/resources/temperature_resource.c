@@ -67,7 +67,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
                     LOG_INFO("conditioner on for user input\n");
                     coap_set_status_code(response,CHANGED_2_04);
                     leds_on(LEDS_GREEN);
-                    green=true
+                    green=true;
                     actuator_on=true;
                 }
                 else if(strcmp(action, "false")==0 && actuator_on){ //the actuator is on and the user wants to turn it off

@@ -68,52 +68,58 @@ public class PeriodicDataRetrieval implements Runnable{ //singleton class
         }
     }
 
-    public static void setMinTemperatureThreshold(Integer val){
+    public static boolean setMinTemperatureThreshold(Integer val){
         if(val >= thresholdsMax.get("temperature")){
             System.out.println("The min threshold you are trying to set is greater than the max threshold");
-            return;
+            return false;
         }
         thresholdsMin.put("temperature", val);
+        return true;
     }
 
-    public static void setMinHumidityThreshold(Integer val){
+    public static boolean setMinHumidityThreshold(Integer val){
         if(val >= thresholdsMax.get("humidity")){
             System.out.println("The min threshold you are trying to set is greater than the max threshold");
-            return;
+            return false;
         }
         thresholdsMin.put("humidity", val);
+        return true;
     }
 
-    public static void setMinLightThreshold(Integer val){
+    public static boolean setMinLightThreshold(Integer val){
         if(val >= thresholdsMax.get("light")){
             System.out.println("The min threshold you are trying to set is greater than the max threshold");
-            return;
+            return false;
         }
         thresholdsMin.put("light", val);
+        return true;
     }
 
-    public static void setMaxTemperatureThreshold(Integer val){
+    public static boolean setMaxTemperatureThreshold(Integer val){
         if(val <= thresholdsMin.get("temperature")){
             System.out.println("The max threshold you are trying to set is lower than the min threshold");
-            return;
+            return false;
         }
         thresholdsMax.put("temperature", val);
+        return true;
     }
 
-    public static void setMaxHumidityThreshold(Integer val){
+    public static boolean setMaxHumidityThreshold(Integer val){
         if(val <= thresholdsMin.get("humidity")){
             System.out.println("The max threshold you are trying to set is lower than the min threshold");
-            return;
+            return false;
         }
         thresholdsMax.put("humidity", val);
+        return true;
     }
 
-    public static void setMaxLightThreshold(Integer val){
+    public static boolean setMaxLightThreshold(Integer val){
         if(val <= thresholdsMin.get("light")){
             System.out.println("The max threshold you are trying to set is lower than the min threshold");
-            return;
+            return false;
         }
         thresholdsMax.put("light", val);
+        return true;
     }
 
 }

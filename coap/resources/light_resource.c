@@ -54,6 +54,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
             //led
             leds_on(LEDS_GREEN);
             leds_on(LEDS_RED);
+            green=false;
             if(!actuator_on){
                 actuator_on=true;
             }

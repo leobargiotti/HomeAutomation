@@ -53,6 +53,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
         if(actuator_needed){ //too humid or too dry, need to activate the actuator
             //led
             leds_off(LEDS_GREEN);
+            green=false;
             leds_on(LEDS_BLUE);
             if(!actuator_on){
                 actuator_on=true;

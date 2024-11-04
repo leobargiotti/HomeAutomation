@@ -103,19 +103,6 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
 }
 
 static void trigger(){
-    /*if(!manual){
-        manual = true;
-        leds_off(LEDS_BLUE);
-        leds_on(LEDS_GREEN);
-    }
-    else{
-        if(leds_get()&&LEDS_GREEN){
-            leds_off(LEDS_GREEN);
-        }
-        else{
-            leds_on(LEDS_GREEN);
-        }
-    }*/
     if(green){
     //if((leds_get() && LEDS_GREEN)>0){
         leds_off(LEDS_GREEN);

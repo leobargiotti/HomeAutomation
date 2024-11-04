@@ -11,7 +11,13 @@ public class PeriodicDataRetrieval implements Runnable{ //singleton class
     private static HashMap<String, Integer> thresholdsMin = new HashMap<>();
     private static HashMap<String, Integer> thresholdsMax = new HashMap<>();
     private static final PeriodicDataRetrieval instance = new PeriodicDataRetrieval();
-    private static boolean checkOff=false;
+    private static HashMap<String, Boolean> checkOffs = new HashMap<>();
+
+    static{
+        checkOffs.put("temperature", false);
+        checkOffs.put("humidity", false);
+        checkOffs.put("light", false);
+    }
 
     private PeriodicDataRetrieval(){
         thresholdsMin.put("temperature", 18); // celsius
@@ -42,15 +48,15 @@ public class PeriodicDataRetrieval implements Runnable{ //singleton class
                         if (values.get(key) < thresholdsMin.get(key) || values.get(key) > thresholdsMax.get(key)) {
                             COAPClient.setSensors(key, true);
                             if (! (boolean) act.get("active")) {
-                                checkOff=true;
+                                checkOffs.put(key, true);
                                 System.err.println("Danger detected on " + key + " sensor, advertising the actuator");
                                 COAPClient.actuatorCall((String) act.get("ip"), key, true, 1);
                             }
                         } else {
                             COAPClient.setSensors(key, false); //turning off the actuator if under or upper the thresholds
                             if ((values.get(key) > thresholdsMin.get(key) && values.get(key) < thresholdsMax.get(key))
-                                    && (boolean) act.get("active") && checkOff) {
-                                checkOff=false;
+                                    && (boolean) act.get("active") && checkOffs.get(key)) {
+                                checkOffs.put(key, false);
                                 System.err.println("Turning off the " + key + " actuator since there is no danger");
                                 COAPClient.actuatorCall((String) act.get("ip"), key, false, 0);
                             }
